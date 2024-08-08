@@ -75,3 +75,22 @@ func (t *WardenQueryClient) GetSignRequest(ctx context.Context, requestID uint64
 
 	return res.SignRequest, nil
 }
+
+func (t *WardenQueryClient) PendingInferenceRequests(ctx context.Context, page *PageRequest) ([]types.InferenceRequest, error) {
+	res, err := t.client.InferenceRequests(ctx, &types.QueryInferenceRequestsRequest{
+		Pagination: page,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// todo: move this logic to wardend so it can be done efficiently
+	pendingRequests := make([]types.InferenceRequest, 0)
+	for _, req := range res.InferenceRequests {
+		if len(req.Output) == 0 {
+			pendingRequests = append(pendingRequests, req)
+		}
+	}
+
+	return pendingRequests, nil
+}
