@@ -1,8 +1,6 @@
 module github.com/warden-protocol/wardenprotocol/tests
 
-go 1.22.5
-
-toolchain go1.23.0
+go 1.22
 
 replace github.com/warden-protocol/wardenprotocol => ..
 
